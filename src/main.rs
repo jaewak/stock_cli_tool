@@ -12,10 +12,17 @@ async fn main() {
 
 	match yahoo.get_latest_quotes("AAPL", "1d").await {
 		Ok(response) => {
-			println!("Stock info ${}", response.last_quote().unwrap().close);
+			let quote = response.last_quote().unwrap();
+
+			println!("Stock info for: ${}", quote.close);
+			println!("Price: ${}", quote.close);
+			println!("High: ${}", quote.high);
+			println!("Low: ${}", quote.low);
+			println!("Volume: ${}", quote.volume);
 		}
 		Err(e) => {
 			println!("Error: {}", e);
 		}
 	}
 }
+
