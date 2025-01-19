@@ -1,7 +1,15 @@
+use clap::Parser;
 use yahoo_finance_api::YahooConnector;
+
+#[derive(Parser)]
+struct Cli {
+	ticker: String,
+}
 
 #[tokio::main]
 async fn main() {
+	let args = Cli::parse();
+
 	let yahoo = match YahooConnector::new() {
 		Ok(connector) => connector,
 		Err(e) => {
@@ -10,11 +18,11 @@ async fn main() {
 		}
 	};
 
-	match yahoo.get_latest_quotes("AAPL", "1d").await {
+	match yahoo.get_latest_quotes(&args.ticker, "1d").await {
 		Ok(response) => {
 			let quote = response.last_quote().unwrap();
 
-			println!("Stock info for: ${}", quote.close);
+			println!("Stock info for: ${}", args.ticker);
 			println!("Price: ${}", quote.close);
 			println!("High: ${}", quote.high);
 			println!("Low: ${}", quote.low);
